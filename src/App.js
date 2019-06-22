@@ -103,6 +103,7 @@ const Outputs = ({ x1, x2, y1, y2, iter }) => {
   );
 };
 
+//I don't like how I'm using value here...
 const OutputBox = ({ value, name, children }) => {
   return (
     <div>
