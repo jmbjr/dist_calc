@@ -1,5 +1,5 @@
-import React, { useState, Component } from "react";
-//import { View, StyleSheet } from "react-native";
+import React, { Component } from "react";
+//import {  StyleSheet } from "react-native";
 import Svg, { Line } from "react-native-svg";
 import "./App.css";
 
@@ -44,16 +44,16 @@ class App extends Component {
     //console.log("Rendering!!!");
     return (
       <div className="App">
-        <InputBox value={x1} name="x1" handleChange={this.handleChange}>
+        <InputBox value={x1} name="x1  " handleChange={this.handleChange}>
           x1
         </InputBox>
-        <InputBox value={y1} name="y1" handleChange={this.handleChange}>
+        <InputBox value={y1} name="y1  " handleChange={this.handleChange}>
           y1
         </InputBox>
-        <InputBox value={x2} name="x2" handleChange={this.handleChange}>
+        <InputBox value={x2} name="x2  " handleChange={this.handleChange}>
           x2
         </InputBox>
-        <InputBox value={y2} name="y2" handleChange={this.handleChange}>
+        <InputBox value={y2} name="y2  " handleChange={this.handleChange}>
           y2
         </InputBox>
         <InputBox
@@ -61,19 +61,25 @@ class App extends Component {
           name="iterations"
           handleChange={this.handleChange}
         >
-          iterations
+          iter
         </InputBox>
         <OutputBox
           value={multiRun(trueLineDist, x1, x2, y1, y2, iterations)}
-          name="trueDist"
+          name="sqrtDist"
         >
-          True Distance (sqrt)
+          sqrt
         </OutputBox>
         <OutputBox
           value={multiRun(quickLineDist, x1, x2, y1, y2, iterations)}
           name="quickDist"
         >
-          Approx Distance
+          fast
+        </OutputBox>
+        <OutputBox
+          value={multiRun(trueLineDist_exponent, x1, x2, y1, y2, iterations)}
+          name="0.5 exponent Dist"
+        >
+          ^0.5
         </OutputBox>
         <SvgLine x1={x1} y1={y1} x2={x2} y2={y2} onClick={this.clickedSVG} />{" "}
       </div>
@@ -83,17 +89,30 @@ class App extends Component {
 const OutputBox = ({ value, name, children }) => {
   return (
     <div>
-      {children} (runtime {value.runtime} s)
-      <input type="text" readOnly name={name} value={value.retval} />
+      {children}
+      <input
+        className="center-block"
+        type="text"
+        readOnly
+        name={name}
+        value={value.retval}
+      />
+      (runtime {value.runtime} s)
     </div>
   );
 };
 
-const InputBox = ({ value, name, handleChange, children }) => {
+const InputBox = ({ value, name, style, handleChange, children }) => {
   return (
     <div>
       {children}
-      <input type="text" name={name} value={value} onChange={handleChange} />
+      <input
+        className="center-block"
+        type="text"
+        name={name}
+        value={value}
+        onChange={handleChange}
+      />
     </div>
   );
 };
@@ -122,6 +141,11 @@ const multiRun = function(func, x1, y1, x2, y2, iterations) {
 
 function trueLineDist(x1, y1, x2, y2) {
   const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+  return dist;
+}
+
+function trueLineDist_exponent(x1, y1, x2, y2) {
+  const dist = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5;
   return dist;
 }
 
