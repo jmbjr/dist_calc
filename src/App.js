@@ -44,16 +44,16 @@ class App extends Component {
     //console.log("Rendering!!!");
     return (
       <div className="App">
-        <InputBox value={x1} name="x1  " handleChange={this.handleChange}>
+        <InputBox value={x1} name="x1" handleChange={this.handleChange}>
           x1
         </InputBox>
-        <InputBox value={y1} name="y1  " handleChange={this.handleChange}>
+        <InputBox value={y1} name="y1" handleChange={this.handleChange}>
           y1
         </InputBox>
-        <InputBox value={x2} name="x2  " handleChange={this.handleChange}>
+        <InputBox value={x2} name="x2" handleChange={this.handleChange}>
           x2
         </InputBox>
-        <InputBox value={y2} name="y2  " handleChange={this.handleChange}>
+        <InputBox value={y2} name="y2" handleChange={this.handleChange}>
           y2
         </InputBox>
         <InputBox
