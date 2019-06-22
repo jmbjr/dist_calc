@@ -32,6 +32,7 @@ class App extends Component {
     const { x1, x2, y1, y2, iter } = this.state;
     return (
       <div className="App">
+        <a href="https://github.com/jmbjr/dist_calc">GitHub repo</a>
         <Inputs
           x1={x1}
           x2={x2}
