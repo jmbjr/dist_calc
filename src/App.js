@@ -29,10 +29,10 @@ class App extends Component {
   }
 
   clickedSVG = evt => {
-    var e = evt.target;
-    var dim = e.getBoundingClientRect();
-    var x = evt.clientX - dim.left;
-    var y = evt.clientY - dim.top;
+    const e = evt.target;
+    const dim = e.getBoundingClientRect();
+    const x = evt.clientX - dim.left;
+    const y = evt.clientY - dim.top;
     this.setState({ x2: x, y2: y });
   };
 
