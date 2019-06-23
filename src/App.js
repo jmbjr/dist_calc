@@ -8,6 +8,13 @@ const floatView = new Float32Array(bytes);
 const intView = new Uint32Array(bytes);
 const threehalfs = 1.5;
 
+const dist_funcs = {
+  sqrtDist: trueLineDist,
+  quickDist: quickLineDist,
+  exponent_Dist: trueLineDist_exponent,
+  Q_sqrt: q_sqrtLineDist_exponent
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -49,60 +56,25 @@ class App extends Component {
 }
 
 //can I use map here to simplify this and remove the duplication?
-const Inputs = ({ x1, x2, y1, y2, iter, exp, handleChange }) => {
-  return (
-    <React.Fragment>
-      <InputBox value={x1} name="x1" handleChange={handleChange}>
-        x1
-      </InputBox>
-      <InputBox value={y1} name="y1" handleChange={handleChange}>
-        y1
-      </InputBox>
-      <InputBox value={x2} name="x2" handleChange={handleChange}>
-        x2
-      </InputBox>
-      <InputBox value={y2} name="y2" handleChange={handleChange}>
-        y2
-      </InputBox>
-      <InputBox value={iter} name="iter" handleChange={handleChange}>
-        iter
-      </InputBox>
-      <InputBox value={exp} name="exp" handleChange={handleChange}>
-        exp
-      </InputBox>
-    </React.Fragment>
-  );
+const Inputs = ({ handleChange, ...rest }) => {
+  const makeInputs = Object.entries(rest).map(input => (
+    <InputBox value={input[1]} name={input[0]} handleChange={handleChange}>
+      {input[0]}
+    </InputBox>
+  ));
+  return <React.Fragment>{makeInputs}</React.Fragment>;
 };
 
-const Outputs = ({ x1, x2, y1, y2, iter, exp }) => {
-  return (
-    <React.Fragment>
-      <OutputBox
-        value={multiRun(trueLineDist, x1, y1, x2, y2, iter, exp)}
-        name="sqrtDist"
-      >
-        sqrt
-      </OutputBox>
-      <OutputBox
-        value={multiRun(quickLineDist, x1, y1, x2, y2, iter, exp)}
-        name="quickDist"
-      >
-        fast
-      </OutputBox>
-      <OutputBox
-        value={multiRun(trueLineDist_exponent, x1, y1, x2, y2, iter, exp)}
-        name="exponent Dist"
-      >
-        ^{exp}
-      </OutputBox>
-      <OutputBox
-        value={multiRun(q_sqrtLineDist_exponent, x1, y1, x2, y2, iter, exp)}
-        name="Q_sqrt"
-      >
-        Q_sqrt
-      </OutputBox>
-    </React.Fragment>
-  );
+const Outputs = ({ x1, y1, x2, y2, iter, exp }) => {
+  const makeOutputs = Object.entries(dist_funcs).map(dist_func => (
+    <OutputBox
+      value={multiRun(dist_func[1], x1, y1, x2, y2, iter, exp)}
+      name={dist_func[0]}
+    >
+      {dist_func[0]}
+    </OutputBox>
+  ));
+  return <React.Fragment>{makeOutputs}</React.Fragment>;
 };
 
 //I don't like how I'm using value here...
