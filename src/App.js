@@ -82,19 +82,19 @@ const Outputs = ({ x1, x2, y1, y2, iter }) => {
   return (
     <React.Fragment>
       <OutputBox
-        value={multiRun(trueLineDist, x1, x2, y1, y2, iter)}
+        value={multiRun(trueLineDist, x1, y1, x2, y2, iter)}
         name="sqrtDist"
       >
         sqrt
       </OutputBox>
       <OutputBox
-        value={multiRun(quickLineDist, x1, x2, y1, y2, iter)}
+        value={multiRun(quickLineDist, x1, y1, x2, y2, iter)}
         name="quickDist"
       >
         fast
       </OutputBox>
       <OutputBox
-        value={multiRun(trueLineDist_exponent, x1, x2, y1, y2, iter)}
+        value={multiRun(trueLineDist_exponent, x1, y1, x2, y2, iter)}
         name="0.5 exponent Dist"
       >
         ^0.5
@@ -115,7 +115,7 @@ const OutputBox = ({ value, name, children }) => {
         name={name}
         value={value.retval}
       />
-      (runtime {value.runtime} s)
+      (runtime {value.runtime} ms)
     </div>
   );
 };
