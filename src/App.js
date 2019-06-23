@@ -16,7 +16,8 @@ class App extends Component {
       x2: 200,
       y1: 0,
       y2: 0,
-      iter: 50000
+      iter: 50000,
+      exp: 0.5
     };
   }
 
@@ -35,7 +36,7 @@ class App extends Component {
   };
 
   render() {
-    const { x1, x2, y1, y2, iter } = this.state;
+    const { x1, x2, y1, y2, iter, exp } = this.state;
     return (
       <div className="App">
         <a href="https://github.com/jmbjr/dist_calc">GitHub repo</a>
@@ -45,6 +46,7 @@ class App extends Component {
           y1={y1}
           y2={y2}
           iter={iter}
+          exp={exp}
           handleChange={this.handleChange}
         />
         <Outputs
@@ -53,6 +55,7 @@ class App extends Component {
           y1={y1}
           y2={y2}
           iter={iter}
+          exp={exp}
           handleChange={this.handleChange}
         />
         <SvgLine x1={x1} y1={y1} x2={x2} y2={y2} onClick={this.clickedSVG} />{" "}
@@ -62,7 +65,7 @@ class App extends Component {
 }
 
 //can I use map here to simplify this and remove the duplication?
-const Inputs = ({ x1, x2, y1, y2, iter, handleChange }) => {
+const Inputs = ({ x1, x2, y1, y2, iter, exp, handleChange }) => {
   return (
     <React.Fragment>
       <InputBox value={x1} name="x1" handleChange={handleChange}>
@@ -80,33 +83,36 @@ const Inputs = ({ x1, x2, y1, y2, iter, handleChange }) => {
       <InputBox value={iter} name="iter" handleChange={handleChange}>
         iter
       </InputBox>
+      <InputBox value={exp} name="exp" handleChange={handleChange}>
+        exp
+      </InputBox>
     </React.Fragment>
   );
 };
 
-const Outputs = ({ x1, x2, y1, y2, iter }) => {
+const Outputs = ({ x1, x2, y1, y2, iter, exp }) => {
   return (
     <React.Fragment>
       <OutputBox
-        value={multiRun(trueLineDist, x1, y1, x2, y2, iter)}
+        value={multiRun(trueLineDist, x1, y1, x2, y2, iter, exp)}
         name="sqrtDist"
       >
         sqrt
       </OutputBox>
       <OutputBox
-        value={multiRun(quickLineDist, x1, y1, x2, y2, iter)}
+        value={multiRun(quickLineDist, x1, y1, x2, y2, iter, exp)}
         name="quickDist"
       >
         fast
       </OutputBox>
       <OutputBox
-        value={multiRun(trueLineDist_exponent, x1, y1, x2, y2, iter)}
-        name="0.5 exponent Dist"
+        value={multiRun(trueLineDist_exponent, x1, y1, x2, y2, iter, exp)}
+        name="exponent Dist"
       >
-        ^0.5
+        ^{exp}
       </OutputBox>
       <OutputBox
-        value={multiRun(q_sqrtLineDist_exponent, x1, y1, x2, y2, iter)}
+        value={multiRun(q_sqrtLineDist_exponent, x1, y1, x2, y2, iter, exp)}
         name="Q_sqrt"
       >
         Q_sqrt
@@ -155,27 +161,27 @@ const SvgLine = ({ x1, x2, y1, y2, onClick }) => {
   );
 };
 
-const multiRun = function(func, x1, y1, x2, y2, iter) {
+const multiRun = function(func, x1, y1, x2, y2, iter, exp) {
   const t0 = performance.now();
   var ii = 0;
   var retval = 0;
   for (ii = 0; ii < iter; ii++) {
-    retval = func(x1, y1, x2, y2).toFixed(2);
+    retval = func(x1, y1, x2, y2, exp).toFixed(2);
   }
   const t1 = performance.now();
   const runtime = (t1 - t0).toFixed(3);
   return { retval, runtime };
 };
 
-function trueLineDist(x1, y1, x2, y2) {
+function trueLineDist(x1, y1, x2, y2, exp) {
   return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
-function trueLineDist_exponent(x1, y1, x2, y2) {
-  return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5;
+function trueLineDist_exponent(x1, y1, x2, y2, exp) {
+  return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** Number(exp);
 }
 
-function quickLineDist(x1, y1, x2, y2) {
+function quickLineDist(x1, y1, x2, y2, exp) {
   if (x1 === y1 && (x1 === x2 || x1 === y2)) {
     return Math.abs(x2 - y2);
   } else {
@@ -188,7 +194,7 @@ function quickLineDist(x1, y1, x2, y2) {
   }
 }
 
-function q_sqrtLineDist_exponent(x1, y1, x2, y2) {
+function q_sqrtLineDist_exponent(x1, y1, x2, y2, exp) {
   return 1 / Q_rsqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
