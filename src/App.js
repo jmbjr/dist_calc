@@ -156,13 +156,11 @@ const multiRun = function(func, x1, y1, x2, y2, iter) {
 };
 
 function trueLineDist(x1, y1, x2, y2) {
-  const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-  return dist;
+  return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
 function trueLineDist_exponent(x1, y1, x2, y2) {
-  const dist = ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5;
-  return dist;
+  return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5;
 }
 
 function quickLineDist(sx, sy, ex, ey) {
