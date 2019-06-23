@@ -151,8 +151,7 @@ const multiRun = function(func, x1, y1, x2, y2, iter) {
     retval = func(x1, y1, x2, y2).toFixed(2);
   }
   const t1 = performance.now();
-  const runtime = (t1 - t0).toFixed(6);
-  console.log(`${func.name} took ${runtime} milliseconds.`);
+  const runtime = (t1 - t0).toFixed(3);
   return { retval, runtime };
 };
 
