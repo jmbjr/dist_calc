@@ -24,7 +24,7 @@ class App extends Component {
 
   handleChange = event => {
     this.setState({
-      [event.target.name]: Number(event.target.value)
+      [event.target.name]: event.target.value
     });
   };
 
@@ -163,16 +163,17 @@ function trueLineDist_exponent(x1, y1, x2, y2) {
   return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5;
 }
 
-function quickLineDist(sx, sy, ex, ey) {
-  if (sx == sy && (sx == ex || sx == ey)) {
-    return Math.abs(ex - ey);
+function quickLineDist(x1, y1, x2, y2) {
+  if (x1 == y1 && (x1 == x2 || x1 == y2)) {
+    return Math.abs(x2 - y2);
+  } else {
+    const d1 = (x1 - x2) ** 2 + (y1 - y2) ** 2;
+    const a = Math.atan2(y1 - y2, x1 - x2);
+    const d2 =
+      (x1 - (Number(x2) + Math.cos(a))) ** 2 +
+      (y1 - (Number(y2) + Math.sin(a))) ** 2;
+    return 0.5 * (d1 - d2 * (1 - 1 / d2));
   }
-  const d1 = (sx - ex) ** 2 + (sy - ey) ** 2;
-  const a = Math.atan2(sy - ey, sx - ex);
-  const d2 = (sx - (ex + Math.cos(a))) ** 2 + (sy - (ey + Math.sin(a))) ** 2;
-  const dist = 0.5 * (d1 - d2 * (1 - 1 / d2));
-
-  return dist;
 }
 
 export default App;
