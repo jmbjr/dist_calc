@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import Svg, { Line } from "react-native-svg";
 import "./App.css";
 
+//for Q_sqrt
+const bytes = new ArrayBuffer(Float32Array.BYTES_PER_ELEMENT);
+const floatView = new Float32Array(bytes);
+const intView = new Uint32Array(bytes);
+const threehalfs = 1.5;
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -99,6 +105,12 @@ const Outputs = ({ x1, x2, y1, y2, iter }) => {
       >
         ^0.5
       </OutputBox>
+      <OutputBox
+        value={multiRun(q_sqrtLineDist_exponent, x1, y1, x2, y2, iter)}
+        name="Q_sqrt"
+      >
+        Q_sqrt
+      </OutputBox>
     </React.Fragment>
   );
 };
@@ -174,6 +186,20 @@ function quickLineDist(x1, y1, x2, y2) {
       (y1 - (Number(y2) + Math.sin(a))) ** 2;
     return 0.5 * (d1 - d2 * (1 - 1 / d2));
   }
+}
+
+function q_sqrtLineDist_exponent(x1, y1, x2, y2) {
+  return 1 / Q_rsqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+}
+
+function Q_rsqrt(number) {
+  const x2 = number * 0.5;
+  floatView[0] = number;
+  intView[0] = 0x5f3759df - (intView[0] >> 1);
+  let y = floatView[0];
+  y = y * (threehalfs - x2 * y * y);
+
+  return y;
 }
 
 export default App;
