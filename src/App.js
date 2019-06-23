@@ -36,29 +36,13 @@ class App extends Component {
   };
 
   render() {
-    const { x1, x2, y1, y2, iter, exp } = this.state;
+    const { ...props } = this.state;
     return (
       <div className="App">
         <a href="https://github.com/jmbjr/dist_calc">GitHub repo</a>
-        <Inputs
-          x1={x1}
-          x2={x2}
-          y1={y1}
-          y2={y2}
-          iter={iter}
-          exp={exp}
-          handleChange={this.handleChange}
-        />
-        <Outputs
-          x1={x1}
-          x2={x2}
-          y1={y1}
-          y2={y2}
-          iter={iter}
-          exp={exp}
-          handleChange={this.handleChange}
-        />
-        <SvgLine x1={x1} y1={y1} x2={x2} y2={y2} onClick={this.clickedSVG} />{" "}
+        <Inputs {...props} handleChange={this.handleChange} />
+        <Outputs {...props} />
+        <SvgLine {...props} onClick={this.clickedSVG} />
       </div>
     );
   }
