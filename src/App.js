@@ -164,7 +164,7 @@ function trueLineDist_exponent(x1, y1, x2, y2) {
 }
 
 function quickLineDist(x1, y1, x2, y2) {
-  if (x1 == y1 && (x1 == x2 || x1 == y2)) {
+  if (x1 === y1 && (x1 === x2 || x1 === y2)) {
     return Math.abs(x2 - y2);
   } else {
     const d1 = (x1 - x2) ** 2 + (y1 - y2) ** 2;
