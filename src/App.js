@@ -65,12 +65,9 @@ const Inputs = ({ handleChange, ...rest }) => {
   return <React.Fragment>{makeInputs}</React.Fragment>;
 };
 
-const Outputs = ({ x1, y1, x2, y2, iter, exp }) => {
+const Outputs = ({ ...props }) => {
   const makeOutputs = Object.entries(dist_funcs).map(dist_func => (
-    <OutputBox
-      value={multiRun(dist_func[1], x1, y1, x2, y2, iter, exp)}
-      name={dist_func[0]}
-    >
+    <OutputBox value={multiRun(dist_func[1], props)} name={dist_func[0]}>
       {dist_func[0]}
     </OutputBox>
   ));
@@ -117,27 +114,27 @@ const SvgLine = ({ x1, x2, y1, y2, onClick }) => {
   );
 };
 
-const multiRun = function(func, x1, y1, x2, y2, iter, exp) {
+const multiRun = function(func, { iter, ...props }) {
   const t0 = performance.now();
   var ii = 0;
   var retval = 0;
   for (ii = 0; ii < iter; ii++) {
-    retval = func(x1, y1, x2, y2, exp).toFixed(2);
+    retval = func(props).toFixed(2);
   }
   const t1 = performance.now();
   const runtime = (t1 - t0).toFixed(3);
   return { retval, runtime };
 };
 
-function trueLineDist(x1, y1, x2, y2, exp) {
+function trueLineDist({ x1, y1, x2, y2 }) {
   return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
-function trueLineDist_exponent(x1, y1, x2, y2, exp) {
+function trueLineDist_exponent({ x1, y1, x2, y2, exp }) {
   return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** Number(exp);
 }
 
-function quickLineDist(x1, y1, x2, y2, exp) {
+function quickLineDist({ x1, y1, x2, y2 }) {
   if (x1 === y1 && (x1 === x2 || x1 === y2)) {
     return Math.abs(x2 - y2);
   } else {
@@ -150,7 +147,7 @@ function quickLineDist(x1, y1, x2, y2, exp) {
   }
 }
 
-function q_sqrtLineDist_exponent(x1, y1, x2, y2, exp) {
+function q_sqrtLineDist_exponent({ x1, y1, x2, y2 }) {
   return 1 / Q_rsqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
