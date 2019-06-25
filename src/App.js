@@ -48,14 +48,13 @@ class App extends Component {
       <div className="App">
         <a href="https://github.com/jmbjr/dist_calc">GitHub repo</a>
         <Inputs {...props} handleChange={this.handleChange} />
-        <Outputs {...props} />
+        <DistOutputs {...props} />
         <SvgLine {...props} onClick={this.clickedSVG} />
       </div>
     );
   }
 }
 
-//can I use map here to simplify this and remove the duplication?
 const Inputs = ({ handleChange, ...rest }) => {
   const makeInputs = Object.entries(rest).map(input => (
     <InputBox value={input[1]} name={input[0]} handleChange={handleChange}>
@@ -65,17 +64,26 @@ const Inputs = ({ handleChange, ...rest }) => {
   return <React.Fragment>{makeInputs}</React.Fragment>;
 };
 
-const Outputs = ({ ...props }) => {
-  const makeOutputs = Object.entries(dist_funcs).map(dist_func => (
-    <OutputBox value={multiRun(dist_func[1], props)} name={dist_func[0]}>
-      {dist_func[0]}
-    </OutputBox>
-  ));
+const DistOutputs = ({ ...props }) => {
+  const makeOutputs = Object.entries(dist_funcs).map(dist_func => {
+    const func_object = multiRun(dist_func[1], props);
+    const dist_value = func_object.retval;
+    const dist_runtime = func_object.runtime;
+    return (
+      <OutputBox
+        value={dist_value}
+        name={dist_func[0]}
+        postInlineText={`runtime=${dist_runtime} ms`}
+      >
+        {dist_func[0]}
+      </OutputBox>
+    );
+  });
   return <React.Fragment>{makeOutputs}</React.Fragment>;
 };
 
 //I don't like how I'm using value here...
-const OutputBox = ({ value, name, children }) => {
+const OutputBox = ({ value, name, children, postInlineText }) => {
   return (
     <div>
       {children}
@@ -84,9 +92,9 @@ const OutputBox = ({ value, name, children }) => {
         type="text"
         readOnly
         name={name}
-        value={value.retval}
+        value={value}
       />
-      (runtime {value.runtime} ms)
+      ({postInlineText})
     </div>
   );
 };
